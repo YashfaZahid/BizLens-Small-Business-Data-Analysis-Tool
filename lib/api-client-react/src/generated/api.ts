@@ -21,6 +21,7 @@ import type {
 
 import type {
   Dataset,
+  DatasetFileInput,
   DatasetInput,
   HealthStatus,
   QuestionInput,
@@ -203,6 +204,80 @@ export const useUploadDataset = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getUploadDatasetMutationOptions(options));
+    }
+
+export const getUploadDatasetFileUrl = () => {
+
+
+
+
+  return `/api/upload/file`
+}
+
+/**
+ * Reads the uploaded table, detects business columns, and computes a first profile.
+ * @summary Upload and profile a CSV or XLSX file
+ */
+export const uploadDatasetFile = async (datasetFileInput: DatasetFileInput, options?: Parameters<typeof customFetch>[1]): Promise<Dataset> => {
+    const formData = new FormData();
+formData.append(`file`, datasetFileInput.file);
+
+  return customFetch<Dataset>(getUploadDatasetFileUrl(),
+  {
+    ...options,
+    method: 'POST'
+    ,
+    body: formData
+  }
+);}
+
+
+
+
+
+export const getUploadDatasetFileMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadDatasetFile>>, TError,{data: BodyType<DatasetFileInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadDatasetFile>>, TError,{data: BodyType<DatasetFileInput>}, TContext> => {
+
+const mutationKey = ['uploadDatasetFile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadDatasetFile>>, {data: BodyType<DatasetFileInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadDatasetFile(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadDatasetFileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadDatasetFile>>>
+    export type UploadDatasetFileMutationBody = BodyType<DatasetFileInput>
+    export type UploadDatasetFileMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Upload and profile a CSV or XLSX file
+ */
+export const useUploadDatasetFile = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadDatasetFile>>, TError,{data: BodyType<DatasetFileInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof uploadDatasetFile>>,
+        TError,
+        {data: BodyType<DatasetFileInput>},
+        TContext
+      > => {
+      return useMutation(getUploadDatasetFileMutationOptions(options));
     }
 
 export const getListDatasetsUrl = () => {

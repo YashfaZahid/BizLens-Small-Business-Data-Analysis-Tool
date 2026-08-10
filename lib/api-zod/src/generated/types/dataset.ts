@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { DataProfile } from './dataProfile';
 import type { DatasetStatus } from './datasetStatus';
 
 export interface Dataset {
@@ -16,4 +17,5 @@ export interface Dataset {
   uploaded_at: string;
   row_count: number;
   columns: string[];
+  profile: DataProfile;
 }

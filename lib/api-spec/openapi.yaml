@@ -161,7 +161,58 @@ components:
           type: array
           items:
             type: string
-      required: [id, filename, size_bytes, file_type, status, uploaded_at, row_count, columns]
+        profile:
+          $ref: "#/components/schemas/DataProfile"
+      required: [id, filename, size_bytes, file_type, status, uploaded_at, row_count, columns, profile]
+    DataProfile:
+      type: object
+      properties:
+        date_column:
+          type: ["string", "null"]
+        revenue_column:
+          type: ["string", "null"]
+        cost_column:
+          type: ["string", "null"]
+        quantity_column:
+          type: ["string", "null"]
+        product_column:
+          type: ["string", "null"]
+        mappings:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnMapping"
+        numeric_columns:
+          type: array
+          items:
+            type: string
+        warnings:
+          type: array
+          items:
+            type: string
+        revenue_total:
+          type: number
+        cost_total:
+          type: number
+        profit_total:
+          type: number
+        quantity_total:
+          type: number
+        top_product:
+          type: ["string", "null"]
+        top_product_revenue:
+          type: number
+      required: [date_column, revenue_column, cost_column, quantity_column, product_column, mappings, numeric_columns, warnings, revenue_total, cost_total, profit_total, quantity_total, top_product, top_product_revenue]
+    ColumnMapping:
+      type: object
+      properties:
+        source:
+          type: string
+        canonical:
+          type: string
+        confidence:
+          type: string
+          enum: [high, medium, low]
+      required: [source, canonical, confidence]
     Report:
       type: object
       properties:

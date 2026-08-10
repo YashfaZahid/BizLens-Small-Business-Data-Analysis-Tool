@@ -6,7 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './columnMapping';
+export * from './columnMappingConfidence';
+export * from './dataProfile';
 export * from './dataset';
+export * from './datasetFileInput';
 export * from './datasetInput';
 export * from './datasetStatus';
 export * from './healthStatus';

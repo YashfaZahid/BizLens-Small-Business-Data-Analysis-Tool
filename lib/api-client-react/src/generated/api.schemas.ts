@@ -25,6 +25,44 @@ export const DatasetStatus = {
   processing: 'processing',
 } as const;
 
+export type ColumnMappingConfidence = typeof ColumnMappingConfidence[keyof typeof ColumnMappingConfidence];
+
+
+export const ColumnMappingConfidence = {
+  high: 'high',
+  medium: 'medium',
+  low: 'low',
+} as const;
+
+export interface ColumnMapping {
+  source: string;
+  canonical: string;
+  confidence: ColumnMappingConfidence;
+}
+
+export interface DataProfile {
+  /** @nullable */
+  date_column: string | null;
+  /** @nullable */
+  revenue_column: string | null;
+  /** @nullable */
+  cost_column: string | null;
+  /** @nullable */
+  quantity_column: string | null;
+  /** @nullable */
+  product_column: string | null;
+  mappings: ColumnMapping[];
+  numeric_columns: string[];
+  warnings: string[];
+  revenue_total: number;
+  cost_total: number;
+  profit_total: number;
+  quantity_total: number;
+  /** @nullable */
+  top_product: string | null;
+  top_product_revenue: number;
+}
+
 export interface Dataset {
   id: string;
   filename: string;
@@ -34,6 +72,11 @@ export interface Dataset {
   uploaded_at: string;
   row_count: number;
   columns: string[];
+  profile: DataProfile;
+}
+
+export interface DatasetFileInput {
+  file: Blob;
 }
 
 export interface ReportMetric {

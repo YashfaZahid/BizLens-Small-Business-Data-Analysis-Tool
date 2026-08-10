@@ -39,7 +39,67 @@ export const UploadDatasetResponse = zod.object({
   "status": zod.enum(['ready', 'needs_review', 'processing']),
   "uploaded_at": zod.string(),
   "row_count": zod.number(),
-  "columns": zod.array(zod.string())
+  "columns": zod.array(zod.string()),
+  "profile": zod.object({
+  "date_column": zod.string().nullable(),
+  "revenue_column": zod.string().nullable(),
+  "cost_column": zod.string().nullable(),
+  "quantity_column": zod.string().nullable(),
+  "product_column": zod.string().nullable(),
+  "mappings": zod.array(zod.object({
+  "source": zod.string(),
+  "canonical": zod.string(),
+  "confidence": zod.enum(['high', 'medium', 'low'])
+})),
+  "numeric_columns": zod.array(zod.string()),
+  "warnings": zod.array(zod.string()),
+  "revenue_total": zod.number(),
+  "cost_total": zod.number(),
+  "profit_total": zod.number(),
+  "quantity_total": zod.number(),
+  "top_product": zod.string().nullable(),
+  "top_product_revenue": zod.number()
+})
+})
+
+
+/**
+ * Reads the uploaded table, detects business columns, and computes a first profile.
+ * @summary Upload and profile a CSV or XLSX file
+ */
+export const UploadDatasetFileBody = zod.object({
+  "file": zod.instanceof(File)
+})
+
+export const UploadDatasetFileResponse = zod.object({
+  "id": zod.string(),
+  "filename": zod.string(),
+  "size_bytes": zod.number(),
+  "file_type": zod.string(),
+  "status": zod.enum(['ready', 'needs_review', 'processing']),
+  "uploaded_at": zod.string(),
+  "row_count": zod.number(),
+  "columns": zod.array(zod.string()),
+  "profile": zod.object({
+  "date_column": zod.string().nullable(),
+  "revenue_column": zod.string().nullable(),
+  "cost_column": zod.string().nullable(),
+  "quantity_column": zod.string().nullable(),
+  "product_column": zod.string().nullable(),
+  "mappings": zod.array(zod.object({
+  "source": zod.string(),
+  "canonical": zod.string(),
+  "confidence": zod.enum(['high', 'medium', 'low'])
+})),
+  "numeric_columns": zod.array(zod.string()),
+  "warnings": zod.array(zod.string()),
+  "revenue_total": zod.number(),
+  "cost_total": zod.number(),
+  "profit_total": zod.number(),
+  "quantity_total": zod.number(),
+  "top_product": zod.string().nullable(),
+  "top_product_revenue": zod.number()
+})
 })
 
 
@@ -54,7 +114,27 @@ export const ListDatasetsResponseItem = zod.object({
   "status": zod.enum(['ready', 'needs_review', 'processing']),
   "uploaded_at": zod.string(),
   "row_count": zod.number(),
-  "columns": zod.array(zod.string())
+  "columns": zod.array(zod.string()),
+  "profile": zod.object({
+  "date_column": zod.string().nullable(),
+  "revenue_column": zod.string().nullable(),
+  "cost_column": zod.string().nullable(),
+  "quantity_column": zod.string().nullable(),
+  "product_column": zod.string().nullable(),
+  "mappings": zod.array(zod.object({
+  "source": zod.string(),
+  "canonical": zod.string(),
+  "confidence": zod.enum(['high', 'medium', 'low'])
+})),
+  "numeric_columns": zod.array(zod.string()),
+  "warnings": zod.array(zod.string()),
+  "revenue_total": zod.number(),
+  "cost_total": zod.number(),
+  "profit_total": zod.number(),
+  "quantity_total": zod.number(),
+  "top_product": zod.string().nullable(),
+  "top_product_revenue": zod.number()
+})
 })
 export const ListDatasetsResponse = zod.array(ListDatasetsResponseItem)
 
@@ -74,7 +154,27 @@ export const GetDatasetResponse = zod.object({
   "status": zod.enum(['ready', 'needs_review', 'processing']),
   "uploaded_at": zod.string(),
   "row_count": zod.number(),
-  "columns": zod.array(zod.string())
+  "columns": zod.array(zod.string()),
+  "profile": zod.object({
+  "date_column": zod.string().nullable(),
+  "revenue_column": zod.string().nullable(),
+  "cost_column": zod.string().nullable(),
+  "quantity_column": zod.string().nullable(),
+  "product_column": zod.string().nullable(),
+  "mappings": zod.array(zod.object({
+  "source": zod.string(),
+  "canonical": zod.string(),
+  "confidence": zod.enum(['high', 'medium', 'low'])
+})),
+  "numeric_columns": zod.array(zod.string()),
+  "warnings": zod.array(zod.string()),
+  "revenue_total": zod.number(),
+  "cost_total": zod.number(),
+  "profit_total": zod.number(),
+  "quantity_total": zod.number(),
+  "top_product": zod.string().nullable(),
+  "top_product_revenue": zod.number()
+})
 })
 
 
