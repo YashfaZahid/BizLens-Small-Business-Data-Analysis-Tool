@@ -1,0 +1,151 @@
+Build the initial scaffold for BizLens — an adaptive business analytics 
+platform for small business owners. This is a SCAFFOLDING PASS ONLY: create 
+file/folder structure, placeholder pages, and API boundary. Do not implement 
+business logic beyond what's explicitly listed below.
+
+===========================================================
+CONSTRAINT: REPLIT IS FOR SCAFFOLDING ONLY, NOT ARCHITECTURE
+===========================================================
+The app must run entirely outside Replit once scaffolded. This means:
+- No Replit databases, auth, storage, or proprietary APIs anywhere in the code.
+- No hardcoded credentials — all config via .env, with .env.example committed.
+- Everything runs locally via standard commands (uvicorn, npm/vite dev).
+This constraint applies to every section below — it is not restated per-section.
+
+===========================================================
+PRODUCT CONCEPT
+===========================================================
+Business owners upload CSV/Excel files with arbitrary, business-specific 
+column structures. Example schemas that must all be supported:
+
+  Business A: Date, Product, Qty, Selling Price, Purchase Price
+  Business B: Order Date, Service, Client, Hours, Amount Received
+  Business C: Invoice #, Customer Name, Item, Units Sold, Net Amount, Supplier Cost
+
+Eventual pipeline (build only the placeholder structure, not the logic):
+  Upload → Understand columns → Generate analytics → Answer natural-language questions
+
+Eventual query flow (interfaces only, no implementation):
+  User question → AI parses intent → structured analysis request → 
+  backend computes from actual data → AI explains the result in text
+  (The LLM never performs numeric calculation — it only interprets 
+  questions and explains backend-computed results.)
+
+===========================================================
+TECH STACK
+===========================================================
+Frontend: React, TypeScript, Vite, Tailwind CSS, React Router
+Backend:  Python, FastAPI, Pandas, openpyxl — must run standalone via 
+          `uvicorn app.main:app --reload`
+Database: Supabase PostgreSQL only (not SQLite, not Firebase, not MongoDB)
+Storage:  Supabase Storage (architecture only — no upload-processing pipeline yet)
+Auth:     Supabase Auth (config structure only — no working auth flow yet)
+
+Required env vars (.env.example, no real values):
+  SUPABASE_URL=
+  SUPABASE_ANON_KEY=
+  SUPABASE_SERVICE_ROLE_KEY=
+  (plus frontend API base URL, and a placeholder AI provider key var)
+
+===========================================================
+FRONTEND STRUCTURE
+===========================================================
+frontend/
+├── src/
+│   ├── components/{ui,layout,dashboard,upload,reports,chat}/
+│   ├── pages/{Dashboard,UploadData,Reports,AskBizLens}.tsx
+│   ├── services/{api.ts,supabase.ts}
+│   ├── types/, hooks/, utils/, layouts/
+│   ├── App.tsx, main.tsx
+
+===========================================================
+BACKEND STRUCTURE
+===========================================================
+backend/
+├── app/
+│   ├── api/{routes,dependencies}/
+│   ├── services/{data,analytics,schema,reports,ai}/   ← create empty, do not implement
+│   ├── schemas/, models/, utils/, config/
+│   ├── main.py
+├── requirements.txt
+
+===========================================================
+FUTURE DATA-UNDERSTANDING SYSTEM (interfaces/placeholders only)
+===========================================================
+Pipeline to stub: Uploaded File → Data Profiler → Column Understanding → 
+Schema Mapper → Canonical Business Schema
+
+Example of what column mapping will eventually do (do not implement — 
+just leave a comment/interface showing the intent):
+  "Amount Paid" / "Sales Value" / "Turnover" / "Net Amount"  → revenue
+  "Item" / "Product Name" / "Service" / "Description"        → product/service concept
+
+Canonical schema fields to define as a type/interface (partial schemas must 
+be supported — not every business will have every field):
+  transaction_id, date, customer, product, category, quantity, revenue, 
+  cost, profit, discount, expense, employee, supplier, location, 
+  payment_method, inventory
+
+===========================================================
+INITIAL UI (mock data, no real logic)
+===========================================================
+Dashboard: cards for Revenue, Profit, Orders, Growth (mock data) + sections 
+  for Business Overview, Recent Activity, Key Insights, Data Status
+
+Upload Data: drag-and-drop for CSV/XLSX, showing filename, size, upload 
+  status, basic validation — no analysis pipeline yet
+
+Reports: placeholder cards/charts, structured so real analytics can 
+  replace mock data later without restructuring
+
+Ask BizLens: chat-style UI with example placeholder questions ("Which 
+  product sold the most last month?", "Why did my revenue decrease?", 
+  "What changed this month?", "Which customers are most valuable?") — 
+  responses clearly marked as demo/mock. No LLM connected.
+
+===========================================================
+API FOUNDATION (placeholder responses are fine)
+===========================================================
+GET  /api/health
+POST /api/upload
+GET  /api/datasets
+GET  /api/datasets/{dataset_id}
+GET  /api/reports/{dataset_id}
+POST /api/questions
+
+===========================================================
+DATABASE
+===========================================================
+Create a minimal initial schema/migration structure only — do not overbuild. 
+It will eventually store: users, uploaded datasets, dataset metadata, 
+detected schemas, column mappings, generated reports, saved questions, 
+analysis results. Keep migrations in the repo for portability.
+
+===========================================================
+DOCUMENTATION & PORTABILITY
+===========================================================
+README.md must cover: project purpose, architecture, tech stack, folder 
+structure, how to run frontend locally, how to run backend locally, 
+required env vars, Supabase setup, and how to continue development 
+outside Replit.
+
+.gitignore must exclude: .env, .env.local, node_modules/, __pycache__/, 
+.venv/, uploaded files, temporary files.
+
+===========================================================
+DO NOT BUILD IN THIS PASS
+===========================================================
+LLM integration, AI agents, embeddings, RAG, vector databases, complex 
+analytics, automatic schema mapping, advanced charts, full authentication, 
+subscriptions/payments, notifications, complex database logic, production 
+deployment, large-dataset handling, elaborate animations.
+
+===========================================================
+DONE WHEN
+===========================================================
+1. Frontend runs. 2. Backend runs. 3. Frontend calls backend successfully. 
+4. Structure is clean and matches above. 5. Zero Replit-specific dependencies 
+anywhere. 6. Supabase config is fully env-variable based. 7. README explains 
+local continuation. 8. Implementation stays intentionally lightweight — this 
+scaffold is not meant to finish BizLens, only to establish a clean, portable 
+foundation to continue in Cursor.

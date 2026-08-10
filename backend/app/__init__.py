@@ -1,0 +1,1 @@
+"""BizLens standalone FastAPI application package."""

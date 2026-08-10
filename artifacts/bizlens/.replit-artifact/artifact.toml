@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "BizLens"
+description = "An adaptive business analytics scaffold for small business owners to upload business data, explore placeholder reports, and ask natural-language questions with a clear path to future backend analytics."
+version = "1.0.0"
+id = "artifacts/bizlens"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22499
+
+[services.development]
+run = "pnpm --filter @workspace/bizlens run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bizlens", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/bizlens/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22499"
+BASE_PATH = "/"

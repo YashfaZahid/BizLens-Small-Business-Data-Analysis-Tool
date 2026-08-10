@@ -10,6 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: datasets
+    description: Uploaded dataset placeholders
+  - name: reports
+    description: Analytics report placeholders
+  - name: questions
+    description: Natural-language question placeholders
 paths:
   /healthz:
     get:
@@ -24,6 +30,95 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /upload:
+    post:
+      operationId: uploadDataset
+      tags: [datasets]
+      summary: Register an uploaded dataset
+      description: Registers file metadata only; profiling and analysis are intentionally deferred.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetInput"
+      responses:
+        "201":
+          description: Dataset registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dataset"
+  /datasets:
+    get:
+      operationId: listDatasets
+      tags: [datasets]
+      summary: List registered datasets
+      responses:
+        "200":
+          description: Dataset list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dataset"
+  /datasets/{dataset_id}:
+    get:
+      operationId: getDataset
+      tags: [datasets]
+      summary: Get one registered dataset
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dataset"
+        "404":
+          description: Dataset not found
+  /reports/{dataset_id}:
+    get:
+      operationId: getReport
+      tags: [reports]
+      summary: Get placeholder report data
+      parameters:
+        - name: dataset_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Placeholder report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+  /questions:
+    post:
+      operationId: askQuestion
+      tags: [questions]
+      summary: Submit a question for a demo response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionInput"
+      responses:
+        "201":
+          description: Demo answer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +128,80 @@ components:
           type: string
       required:
         - status
+    DatasetInput:
+      type: object
+      properties:
+        filename:
+          type: string
+        size_bytes:
+          type: number
+          minimum: 0
+        file_type:
+          type: string
+      required: [filename, size_bytes, file_type]
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+        filename:
+          type: string
+        size_bytes:
+          type: number
+        file_type:
+          type: string
+        status:
+          type: string
+          enum: [ready, needs_review, processing]
+        uploaded_at:
+          type: string
+        row_count:
+          type: number
+        columns:
+          type: array
+          items:
+            type: string
+      required: [id, filename, size_bytes, file_type, status, uploaded_at, row_count, columns]
+    Report:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+        generated:
+          type: boolean
+        message:
+          type: string
+        metrics:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReportMetric"
+      required: [dataset_id, generated, message, metrics]
+    ReportMetric:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+        change:
+          type: string
+      required: [label, value, change]
+    QuestionInput:
+      type: object
+      properties:
+        question:
+          type: string
+        dataset_id:
+          type: string
+      required: [question]
+    QuestionResponse:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        demo:
+          type: boolean
+      required: [question, answer, demo]
 

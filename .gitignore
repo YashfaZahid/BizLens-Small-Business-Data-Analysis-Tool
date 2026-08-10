@@ -10,6 +10,14 @@ out-tsc
 
 # dependencies
 node_modules
+.env
+.env.local
+__pycache__/
+.venv/
+uploads/
+uploaded_files/
+*.tmp
+*.log
 
 # IDEs and editors
 /.idea
